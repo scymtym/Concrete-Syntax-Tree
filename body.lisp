@@ -1,10 +1,11 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defmethod separate-ordinary-body ((body atom-cst))
+(defmethod separate-ordinary-body ((body atom-cst) &key (listify-body t))
+  (declare (ignore listify-body))
   (assert (null body))
   (values '() '()))
 
-(defmethod separate-ordinary-body ((body cons-cst))
+(defmethod separate-ordinary-body ((body cons-cst) &key (listify-body t))
   (loop with declarations = '()
         for remaining = body then (rest remaining)
         until (or (null remaining)
@@ -12,13 +13,16 @@
                   (not (eq (raw (first (first remaining))) 'declare)))
         do (push (first remaining) declarations)
         finally (return (values (reverse declarations)
-                                (listify remaining)))))
+                                (if listify-body
+                                    (listify remaining)
+                                    remaining)))))
 
-(defmethod separate-function-body ((body atom-cst))
+(defmethod separate-function-body ((body atom-cst) &key (listify-body t))
+  (declare (ignore listify-body))
   (assert (null body))
   (values '() '()))
 
-(defmethod separate-function-body ((body cons-cst))
+(defmethod separate-function-body ((body cons-cst) &key (listify-body t))
   (loop with declarations = '()
         with documentation = nil
         for remaining = body then (rest remaining)
@@ -36,4 +40,6 @@
                (push (first remaining) declarations))
         finally (return (values (reverse declarations)
                                 documentation
-                                (listify remaining)))))
+                                (if listify-body
+                                    (listify remaining)
+                                    remaining)))))

@@ -44,7 +44,7 @@
 ;;; value is an ordinary Common Lisp list, but the elements are CSTs.
 ;;; It is assumed that the input has already been determined to be a
 ;;; proper list represented as a CST.
-(defgeneric separate-ordinary-body (body-cst))
+(defgeneric separate-ordinary-body (body-cst &key listify-body))
 
 ;;; Given a body in the form of a CST that may contain both
 ;;; declarations and a documentation string, return three values, a
@@ -53,7 +53,7 @@
 ;;; forms in the body.  Each return value is an ordinary Common Lisp
 ;;; list, but the elements are CSTs.  It is assumed that the input has
 ;;; already been determined to be a proper list represented as a CST.
-(defgeneric separate-function-body (body-cst))
+(defgeneric separate-function-body (body-cst &key listify-body))
 
 ;;; Given a CST and an expression that is presumably some transformed
 ;;; version of the raw version of the CST, create a new CST that tries
