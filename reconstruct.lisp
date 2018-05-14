@@ -130,6 +130,9 @@
                                    :source default-source))))))
       (traverse expression))))
 
+#+maybe (defmethod note-reconstructed-node (client old new)
+  )
+
 (defmethod reconstruct (expression (cst cst) client &key default-source)
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
