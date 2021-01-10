@@ -1,11 +1,11 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defmethod cstify ((list cl:null))
-  (make-instance 'atom-cst :raw nil))
+;;; Handles NIL terminating a proper list as well as any other atom in
+;;; case of a dotted list.
+(defmethod cstify ((thing t))
+  (make-instance 'atom-cst :raw thing))
 
-(defmethod cstify ((list cl:cons))
-  (let ((rest (cstify (cdr list))))
-    (make-instance 'cons-cst
-      :first (car list)
-      :rest rest
-      :raw (cl:cons (raw (car list)) (raw rest)))))
+(defmethod cstify ((thing cl:cons))
+  (make-instance 'cons-cst :first (cstify (cl:car thing))
+                           :rest (cstify (cl:cdr thing))
+                           :raw thing))
